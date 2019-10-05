@@ -1082,7 +1082,7 @@ header label {
   background-color: #2d96bd;
 }
 .post-toc .tocbot-list-menu {
-  margin: 1.25rem 0.75rem;
+  margin: 1.25rem $padding-18;
   font-size: 0.75rem;
 }
 .post-toc .tocbot-list-menu a {
