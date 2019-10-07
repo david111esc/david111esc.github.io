@@ -7,7 +7,7 @@
 
 
 
-<title>測試工具與手法 | Hexo</title>
+<title>軟體品質維護-測試簡介 | Hexo</title>
 
 
 
@@ -169,7 +169,7 @@
     
     <article class="post-wrap">
         <header class="post-header">
-            <h1 class="post-title">測試工具與手法</h1>
+            <h1 class="post-title">軟體品質維護-測試簡介</h1>
             
                 <div class="post-meta">
                     
@@ -194,17 +194,21 @@
         </header>
 
         <div class="post-content">
-            <h2 id="進行測試的原因"><a href="#進行測試的原因" class="headerlink" title="進行測試的原因"></a>進行測試的原因</h2><p>對程式進行測試是為了維持其品質，藉由在各項測試中抓出Bug，避免最終程式上線運行時的錯誤導致更嚴重的損失。</p>
+            <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>此篇文章主要針對測試的相關名詞進行簡介，主要是從內部訓練課程中聽到的名詞進行搜尋， 後來才發現Version Control感覺和測試沒有太直接的相關性，不過已經寫下去了，所以就納入其中，希望未來有時間再針對git的相關的功能進行深入探討。</p>
+<h2 id="進行測試的原因"><a href="#進行測試的原因" class="headerlink" title="進行測試的原因"></a>進行測試的原因</h2><p>對程式進行測試是為了維持其品質，藉由在各項測試中抓出Bug，避免最終程式上線運行時的錯誤導致更嚴重的損失。</p>
 <h2 id="測試的相關名詞"><a href="#測試的相關名詞" class="headerlink" title="測試的相關名詞"></a>測試的相關名詞</h2><ol>
+<li>Version Control</li>
+<li>Black Box testing</li>
+<li>White Box testing</li>
 <li>SCA(static Code Analyzer)</li>
 <li>Unit test</li>
-<li>Black Box test</li>
-<li>White Box test</li>
-<li>Version Control</li>
 <li>TDD(Test-Driven Development)</li>
-<li>BDD(Behavior-Driven development)</li>
+<li>BDD(Behavior-Driven Development)</li>
 </ol>
-<h3 id="1-SCA-static-Code-Analyzer"><a href="#1-SCA-static-Code-Analyzer" class="headerlink" title="1. SCA(static Code Analyzer)"></a>1. SCA(static Code Analyzer)</h3><p><font color="#FF8C00"><strong>靜態程式分析</strong></font>意思就是不需要執行程式碼進行程式分析的方法，此種方式通常會對不同程式語言有依賴性。<br>SCA的工具通常能讓使用者設定不同條件，藉此檢視程式碼是否符合這些規則，SCA方法被使用的場景:</p>
+<h3 id="1-Version-Control"><a href="#1-Version-Control" class="headerlink" title="1. Version Control"></a>1. Version Control</h3><p><font color="#FF8C00"><strong>版本控制</strong></font>，透過控制程式碼、文件等檔案的版本內容，確保專案中協作人員能夠同步使用到相同版本的檔案。目前常見的版本控制軟體，如:Git、Subversion(SVN)。版本控制的優點，追蹤版本改動、版本回溯、分支控管等。</p>
+<h3 id="2-Black-Box-testing"><a href="#2-Black-Box-testing" class="headerlink" title="2. Black Box testing"></a>2. Black Box testing</h3><p><font color="#FF8C00"><strong>黑箱測試</strong></font>，黑箱的意思就是測試者<font color="#FF8C00"><strong>無須</strong></font>了解程式內部運作的情況，僅針對輸入、輸出和系統功能的運作進行檢驗。測試的案例通常依照程式設計的功能需求與規範，進行有效與無效的輸入，並驗證對應的輸出是否符合預期結果。<br>此種測試方法適合絕大部分的軟體測試，例如:<font color="#FF8C00"><strong>整合測試(integration testing)、系統測試(system testing)</strong></font>。</p>
+<h3 id="3-White-Box-testing"><a href="#3-White-Box-testing" class="headerlink" title="3. White Box testing"></a>3. White Box testing</h3><p><font color="#FF8C00"><strong>白箱測試</strong></font>，需要針對程式本身的結構、邏輯等運作進行檢驗，又稱透明盒測試(glass box testing))、結構測試(structural testing)。此種方式的測試需要充分理解程式內部的演算法、架構等資訊，然後對程式運作時資料的流動路徑、邏輯運算、系統互動等進行測試。白箱測試可以應用於單元測試、整合測試、系統軟體測試等。<br>白箱測試的優點在於，掌握原始碼的細節，能夠針對程式碼進行最佳化，並消除可能存在的隱藏缺陷，透過白箱測試也能提出反饋，提升軟體開發工程師未來開發的能力。缺點則是此種測試方法非常複雜且耗時，測試人員需要有足夠的技術能力才能夠進行有效的測試，另外，儘管白箱測試進行大量的檢驗，仍無法百分之百保證涵蓋所有情況，只能盡可能的增加測試的覆蓋率。</p>
+<h3 id="4-SCA-static-Code-Analyzer"><a href="#4-SCA-static-Code-Analyzer" class="headerlink" title="4. SCA(static Code Analyzer)"></a>4. SCA(static Code Analyzer)</h3><p><font color="#FF8C00"><strong>靜態程式分析</strong></font>意思就是不需要執行程式碼進行程式分析的方法，此種方式通常會對不同程式語言有依賴性。<br>SCA的工具通常能讓使用者設定不同條件，藉此檢視程式碼是否符合這些規則，SCA方法被使用的場景:</p>
 <ol>
 <li><font color="#FF8C00">Code Syle</font>: 當軟體開發Team中有針對程式碼風格進行規範時(e.g.排版、變數命名…etc)，就能將這些規則建立在SCA工具中進行檢測，降低Code Review成本。</li>
 <li><font color="#FF8C00">Refactor</font>: 重構是為了消除程式碼中的”壞味道”，消除為了追求時限內產出而累積的技術債，或者增加未來程式開發拓展的靈活性等，而所謂的”壞味道”多數也都能夠具體化的描述成規則，因此，就能利用SCA工具將這些問題找出來，加速重構程式法的效率。</li>
@@ -213,7 +217,10 @@
 <p>Python Code</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> gc</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">lock_memory</span><span class="params">()</span>:</span></span><br><span class="line">  a = range(<span class="number">1000</span>*<span class="number">1000</span>)</span><br><span class="line">  <span class="keyword">if</span> true:</span><br><span class="line">    <span class="keyword">return</span></span><br><span class="line">  <span class="keyword">del</span> a</span><br><span class="line">  gc.collect()</span><br></pre></td></tr></table></figure>
 
-<h3 id="2-Unit-test"><a href="#2-Unit-test" class="headerlink" title="2. Unit test"></a>2. Unit test</h3><h3 id="3-Black-Box-test"><a href="#3-Black-Box-test" class="headerlink" title="3. Black Box test"></a>3. Black Box test</h3><h3 id="4-White-Box-test"><a href="#4-White-Box-test" class="headerlink" title="4. White Box test"></a>4. White Box test</h3><h3 id="5-Version-Control"><a href="#5-Version-Control" class="headerlink" title="5. Version Control"></a>5. Version Control</h3><h3 id="6-TDD-Test-Driven-Development"><a href="#6-TDD-Test-Driven-Development" class="headerlink" title="6. TDD(Test-Driven Development)"></a>6. TDD(Test-Driven Development)</h3><h3 id="7-BDD-Behavior-Driven-development"><a href="#7-BDD-Behavior-Driven-development" class="headerlink" title="7. BDD(Behavior-Driven development)"></a>7. BDD(Behavior-Driven development)</h3>
+<h3 id="5-Unit-test"><a href="#5-Unit-test" class="headerlink" title="5. Unit test"></a>5. Unit test</h3><p><font color="#FF8C00"><strong>單元測試</strong></font>是針對軟體設計中<font color="#FF8C00"><strong>最小單位</strong></font>進行正確性檢驗的行為，程式中的單元可以是程式、函式(Function)、過程(Process)等，對物件(Object)而言最小單元就是物件的方法(Methods)。<br>基本上，程式每被修改一次就應該要進行單元測試，單元測試的優點是能夠對程式的細節進行檢視，缺點則是當測試的覆蓋率越高時，需要耗費大量的時間與人力成本。<br>單元測試通常為程式編寫者自行撰寫，好處是編寫者對於自己寫的東西較為清楚，測試程式能寫得較快速，但這樣相對的在開發上需要花費更多時間，而且有些盲點自己無法發現檢測出來。</p>
+<h3 id="6-TDD-Test-Driven-Development"><a href="#6-TDD-Test-Driven-Development" class="headerlink" title="6. TDD(Test-Driven Development)"></a>6. TDD(Test-Driven Development)</h3><p><font color="#FF8C00"><strong>測試驅動開發</strong></font>是一種軟體開發過程的方法，提倡先根據需求撰寫測試程序，再依據測試開發出符合其需求的程式。TDD優點是<font color="#FF8C00">避免過度設計帶來的浪費</font>，同時開發者必須真正完全了解需求，才能夠撰寫出完整的測試。缺點則是開發者可能只為了滿足測試程序而忽略對實際需求的實現(可能導致重構成本增加)</p>
+<h3 id="7-BDD-Behavior-Driven-Development"><a href="#7-BDD-Behavior-Driven-Development" class="headerlink" title="7. BDD(Behavior-Driven Development)"></a>7. BDD(Behavior-Driven Development)</h3><p><font color="#FF8C00"><strong>行為驅動開發</strong></font>，對此方法還不是很清楚其定義，暫且先不介紹僅留下名詞供日後查詢。</p>
+
         </div>
 
         
@@ -251,7 +258,7 @@
                 <span class="tag">
                     
                     
-                        <a href="/tags/運維/"># 運維</a>
+                        <a href="/tags/測試/"># 測試</a>
                     
                         
                 </span>
