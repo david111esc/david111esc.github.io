@@ -245,27 +245,29 @@
 <blockquote>
 <p>…,which should for the time being be thought of as some collection of numerical measurements. (原文)</p>
 </blockquote>
-<p>因此，在這邊直接用 $\mathbb{X}, \mathbb{Y}$ 表示其<br>屬於的集合。</p>
+<p>因此，在這邊直接用 $\mathbb{X}, \mathbb{Y}$ 表示其屬於的集合。</p>
 <blockquote>
 <p>The true relationship $f$ is <em>unknown</em> to us, and our aim is to recover it as well as we can from data. (原文)</p>
 </blockquote>
 <p>然而， $f$ 是<font color="#FF8C00"><strong><em>未知(unknown)</em></strong></font>的，要找出真實的 $f$ 需耗費的代價非常大，而且多數時候根本無法找到。因此，機器學習的方法藉由從已知的資料中找出其相關性，近似此未知的函數映射。</p>
 <blockquote>
-<p>Given the dataset $\mathcal{D}={(\mathbf{x}_i,y_i)|\mathbf{x}_i \in \mathbb{X}, y_i \in \mathbb{Y}, i \in 1..n}$ , where each pair $(\mathbf{x}_i,y_i)$ is an example of input-output mapping, and we want to find a function $\hat{y}=h(\mathbf{x})$ that should approximate $f$ by learning from this dataset. The function $h$ is called <strong><em>hypothesis</em></strong>.</p>
+<p>Given the dataset $\mathcal{D}= {(\mathbf{x}_i,y_i)|\mathbf{x}_i \in \mathbb{X}, y_i \in \mathbb{Y}, i \in 1..n }$ , where each pair $(\mathbf{x}_i,y_i)$ is an example of input-output mapping, and we want to find a function $\hat{y}=h(\mathbf{x})$ that should approximate $f$ by learning from this dataset. The function $h$ is called <strong><em>hypothesis</em></strong>.</p>
 </blockquote>
 <p>通常我們會有一筆資料集，在 Regression tasks 中，這筆資料集會包含輸入的特徵(feature) $\mathbf{x}_i$ 與其成對的輸出目標值(target) $y_i$。 然後，我們從資料集中找出映射 $h$ 用來近似函數 $f$，這項映射函數被稱為 <font color="#FF8C00"><strong><em>hypothesis</em></strong></font>，意指對於 $f$ 的假設。</p>
 <p>從統計學的角度來看，這筆資料集就是對於母體的抽樣，意味著當資料集越大越廣泛，就越能接近真實世界的情況。因此，從抽樣取得得資料集內學習到的關聯性，當資料集越大時，越有機會近似真實的 $f$。( <strong><em>hypothesis</em></strong> 的選擇也會有關鍵性的影響。)</p>
 <blockquote>
 <p>Since learning arbitrary functions is intractable, we restrict ourselves to some <strong><em>hypothesis class</em></strong> $\mathcal{H}$ of allowable functions. (原文)</p>
 </blockquote>
-<p>要描述</p>
+<p>要描述 $\mathbb{X}$ 到 $\mathbb{Y}$ 之間映射函數的方法非常多，若沒有進行範圍上的限制，找尋函數 $h$ 的過程會困難且發散。因此，我們會進行規範在給定的集合內尋找，這個集合就是  <font color="#FF8C00"><strong><em>hypothesis class\space</em></strong></font>。</p>
 <h2 id="名詞"><a href="#名詞" class="headerlink" title="名詞"></a>名詞</h2><ul>
 <li><strong>regression</strong></li>
 <li><strong>hypothesis</strong></li>
 <li><strong>hypothesis class</strong></li>
 <li><strong>parametric model</strong></li>
 <li><strong>parameters/weights</strong></li>
-<li><strong>cost function</strong></li>
+<li><strong>cost function</strong><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">graph LR;</span><br><span class="line">A[Machine Learning]--&gt;B[Regression]</span><br><span class="line">B--&gt;C[Parametric model]</span><br></pre></td></tr></table></figure>
+
+</li>
 </ul>
 <h2 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h2><p>講義第五頁，CH1 Regression I 的前言。</p>
 
