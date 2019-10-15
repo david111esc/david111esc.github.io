@@ -251,7 +251,7 @@
 </blockquote>
 <p>然而， $f$ 是<font color="#FF8C00"><strong><em>未知(unknown)</em></strong></font>的，要找出真實的 $f$ 需耗費的代價非常大，而且多數時候根本無法找到。因此，機器學習的方法藉由從已知的資料中找出其相關性，近似此未知的函數映射。</p>
 <blockquote>
-<p>Given the dataset $\mathcal{D}= {(\mathbf{x}_i,y_i)|\mathbf{x}_i \in \mathbb{X}, y_i \in \mathbb{Y}, i \in 1..n }$ , where each pair $(\mathbf{x}_i,y_i)$ is an example of input-output mapping, and we want to find a function $\hat{y}=h(\mathbf{x})$ that should approximate $f$ by learning from this dataset. The function $h$ is called <strong><em>hypothesis</em></strong>.</p>
+<p>Given the dataset $\mathcal{D}= \lbrace(\mathbf{x}_i,y_i)|\mathbf{x}_i \in \mathbb{X}, y_i \in \mathbb{Y}, i \in 1..n \rbrace$ , where each pair $(\mathbf{x}_i,y_i)$ is an example of input-output mapping, and we want to find a function $\hat{y}=h(\mathbf{x})$ that should approximate $f$ by learning from this dataset. The function $h$ is called <strong><em>hypothesis</em></strong>.</p>
 </blockquote>
 <p>通常我們會有一筆資料集，在 Regression tasks 中，這筆資料集會包含輸入的特徵(feature) $\mathbf{x}_i$ 與其成對的輸出目標值(target) $y_i$。 然後，我們從資料集中找出映射 $h$ 用來近似函數 $f$，這項映射函數被稱為 <font color="#FF8C00"><strong><em>hypothesis</em></strong></font>，意指對於 $f$ 的假設。</p>
 <p>從統計學的角度來看，這筆資料集就是對於母體的抽樣，意味著當資料集越大越廣泛，就越能接近真實世界的情況。因此，從抽樣取得得資料集內學習到的關聯性，當資料集越大時，越有機會近似真實的 $f$。( <strong><em>hypothesis</em></strong> 的選擇也會有關鍵性的影響。)</p>
@@ -264,7 +264,7 @@
 </blockquote>
 <p>更進一步，把範圍限縮到所謂的 <font color="#FF8C00"><strong><em>parametric model</em></strong></font>，也就是函數會隨著參數 $\mathbf{w}$ 變化。原文中 $\mathbf{w} \in \mathbb{R}^d$，維度與 $\mathbf{x}$ ，不過也有許多情形下不一定相等(e.g. Neural Network)，因此這邊應該只是符號上使用不夠嚴謹。<br>另外，相對於 <strong><em>parametric model</em></strong>，當然也存在無須參數的 <strong><em>non-parametric model</em></strong>，這部分界定有時候很模糊，但絕大部分 lazy learning 或 instance-based 的模型都包含其中(e.g. KNN)。</p>
 <blockquote>
-<p>We can rewrite the equation as follow:<br>$$<br>h_{\mathbf{w}}(\mathbf{x}) = g(\mathbf{x},\mathbf{w})<br>$$<br>Then, the hypothesis class can be represented by the set of functions which depends on the possible choices of the parameters $\mathbf{w}$.<br>$$<br>\mathcal{H}={h_{\mathbf{w}}|\mathbf{w}\in \mathbb{R}^d}<br>$$</p>
+<p>We can rewrite the equation as follow:<br>$$<br>h_{\mathbf{w}}(\mathbf{x}) = g(\mathbf{x},\mathbf{w})<br>$$<br>Then, the hypothesis class can be represented by the set of functions which depends on the possible choices of the parameters $\mathbf{w}$.<br>$$<br>\mathcal{H}=\lbrace h_{\mathbf{w}}|\mathbf{w}\in \mathbb{R}^d \rbrace<br>$$</p>
 </blockquote>
 <h2 id="名詞"><a href="#名詞" class="headerlink" title="名詞"></a>名詞</h2><ul>
 <li><strong>regression</strong></li>
