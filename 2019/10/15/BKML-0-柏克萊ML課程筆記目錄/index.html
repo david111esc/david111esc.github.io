@@ -7,7 +7,7 @@
 
 
 
-<title>Do it! | Hexo</title>
+<title>BKML-0-柏克萊ML課程筆記目錄 | Hexo</title>
 
 
 
@@ -103,11 +103,73 @@
             <div class="container">
     
     
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
+        <a onclick="go_top()">Back to top</a>
+        <a onclick="go_bottom()">Go to bottom</a>
+    </div>
+</div>
+
+<script>
+    document.ready(
+        function () {
+            tocbot.init({
+                tocSelector: '.tocbot-list',
+                contentSelector: '.post-content',
+                headingSelector: 'h1, h2, h3, h4, h5',
+                collapseDepth: 1,
+                orderedList: false,
+                scrollSmooth: true,
+            })
+        }
+    )
+
+    function expand_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 6,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "collapse_toc()");
+        b.innerHTML = "Collapse all"
+    }
+
+    function collapse_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 1,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "expand_toc()");
+        b.innerHTML = "Expand all"
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+</script>
+    
 
     
     <article class="post-wrap">
         <header class="post-header">
-            <h1 class="post-title">Do it!</h1>
+            <h1 class="post-title">BKML-0-柏克萊ML課程筆記目錄</h1>
             
                 <div class="post-meta">
                     
@@ -116,16 +178,24 @@
 
                     
                         <span class="post-time">
-                        Date: <a href="#">October 5, 2019&nbsp;&nbsp;10:30:49</a>
+                        Date: <a href="#">October 15, 2019&nbsp;&nbsp;9:52:34</a>
                         </span>
                     
+                    
+                        <span class="post-category">
+                    Category:
+                            
+                                <a href="/categories/Berkeley-ML-筆記/">Berkeley ML 筆記</a>
+                            
+                        </span>
                     
                 </div>
             
         </header>
 
         <div class="post-content">
-            <p>第一篇文章，希望以此為契機精進自己，為了一年後、三年後、十年後，仍舊能保持在技術前端。</p>
+            <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>此系列希望藉由閱讀 UC Berkeley CS189 課程的講義，對 Machine Learning 進行簡單的回顧，加深印象並補上之前缺漏的知識。</p>
+<h2 id="目錄"><a href="#目錄" class="headerlink" title="目錄"></a>目錄</h2><h2 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h2><p><strong>[CS189] UC Berkeley Machine Learning Course</strong><br><a href="https://www.eecs189.org/static/resources/comprehensive-guide.pdf" target="_blank" rel="noopener">https://www.eecs189.org/static/resources/comprehensive-guide.pdf</a></p>
 
         </div>
 
@@ -140,7 +210,7 @@
                 
                     <p class="copyright-item">
                         <span>Permalink:</span>
-                        <span><a href="https://david111esc.github.io/2019/10/05/Do-it/">https://david111esc.github.io/2019/10/05/Do-it/</a></span>
+                        <span><a href="https://david111esc.github.io/2019/10/15/BKML-0-柏克萊ML課程筆記目錄/">https://david111esc.github.io/2019/10/15/BKML-0-柏克萊ML課程筆記目錄/</a></span>
                     </p>
                 
                 
@@ -163,6 +233,12 @@
                 <span>Tag(s):</span>
                 <span class="tag">
                     
+                    
+                        <a href="/tags/Machine-Learning/"># Machine Learning</a>
+                    
+                        <a href="/tags/Directory/"># Directory</a>
+                    
+                        
                 </span>
             </div>
             <div>
@@ -173,10 +249,8 @@
         </section>
         <section class="post-nav">
             
-                <a class="prev" rel="prev" href="/2019/10/05/軟體品質維護-測試簡介/">軟體品質維護-測試簡介</a>
             
-            
-            <a class="next" rel="next" href="/2019/10/05/hello-world/">Hello World</a>
+            <a class="next" rel="next" href="/2019/10/15/BKML-1-Regression-I/">BKML-1 Regression I</a>
             
         </section>
 
