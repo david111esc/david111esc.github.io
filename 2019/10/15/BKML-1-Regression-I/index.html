@@ -35,6 +35,44 @@
     
     
         
+            <!-- MathJax配置，可通过单美元符号书写行内公式等 -->
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+    "HTML-CSS": {
+        preferredFont: "TeX",
+        availableFonts: ["STIX","TeX"],
+        linebreaks: { automatic:true },
+        EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50)
+    },
+    tex2jax: {
+        inlineMath: [ ["$", "$"], ["\\(","\\)"] ],
+        processEscapes: true,
+        ignoreClass: "tex2jax_ignore|dno",
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+        equationNumbers: { autoNumber: "AMS" },
+        noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } },
+        Macros: { href: "{}" }
+    },
+    messageStyle: "none"
+    });
+</script>
+<!-- 给MathJax元素添加has-jax class -->
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+<!-- 通过连接CDN加载MathJax的js代码 -->
+<script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML">
+</script>
+
+
+        
     
 
 
@@ -103,6 +141,68 @@
             <div class="container">
     
     
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
+        <a onclick="go_top()">Back to top</a>
+        <a onclick="go_bottom()">Go to bottom</a>
+    </div>
+</div>
+
+<script>
+    document.ready(
+        function () {
+            tocbot.init({
+                tocSelector: '.tocbot-list',
+                contentSelector: '.post-content',
+                headingSelector: 'h1, h2, h3, h4, h5',
+                collapseDepth: 1,
+                orderedList: false,
+                scrollSmooth: true,
+            })
+        }
+    )
+
+    function expand_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 6,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "collapse_toc()");
+        b.innerHTML = "Collapse all"
+    }
+
+    function collapse_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 1,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "expand_toc()");
+        b.innerHTML = "Expand all"
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+</script>
+    
 
     
     <article class="post-wrap">
@@ -120,12 +220,54 @@
                         </span>
                     
                     
+                        <span class="post-category">
+                    Category:
+                            
+                                <a href="/categories/Berkeley-ML-筆記/">Berkeley ML 筆記</a>
+                            
+                        </span>
+                    
                 </div>
             
         </header>
 
         <div class="post-content">
-            
+            <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>本篇將會敘述 Regression 的前提假設，並且用數學符號表示。</p>
+<h2 id="主題"><a href="#主題" class="headerlink" title="主題"></a>主題</h2><h3 id="1-機器學習的目的是什麼"><a href="#1-機器學習的目的是什麼" class="headerlink" title="1. 機器學習的目的是什麼?"></a><strong>1. 機器學習的目的是什麼?</strong></h3><blockquote>
+<p>Our goal in machine learning is to extract a <em>relationship</em> from data.</p>
+</blockquote>
+<p>機器學習的目的是為了找出資料之間的<strong>關聯性</strong>，這邊隱含一道<font color="#FF8C00">假設 “資料間<strong><em>存在</em></strong>未知的關聯”</font>，接下來就要將這道假設用數學語言表示。</p>
+<h3 id="2-Regression-tasks-是什麼"><a href="#2-Regression-tasks-是什麼" class="headerlink" title="2. Regression tasks 是什麼?"></a><strong>2. Regression tasks 是什麼?</strong></h3><p>承接前面講到要從資料中找出關聯性，在機器學習其中一項主題 <font color="#FF8C00"><strong>迴歸(Regression)</strong></font> 中，就是希望從資料中找出與對應實數間的關聯性。例如:房屋資訊與房價的關聯性、個人資訊與薪水的關聯性等等。</p>
+<h3 id="3-用數學語言定義-Regression-tasks"><a href="#3-用數學語言定義-Regression-tasks" class="headerlink" title="3. 用數學語言定義 Regression tasks"></a>3. <strong>用數學語言定義 Regression tasks</strong></h3><blockquote>
+<p>Assume that there exists the  <strong><em>relationship</em></strong> and takes the form of a function $y=f(\mathbf{x})$, where the input $\mathbf{x} \in \mathbb{X} \subset \mathbb{R}^d$ and output $y \in \mathbb{Y}\subset\mathbb{R}$.</p>
+</blockquote>
+<p>首先，我們用一道函數 $y=f(\mathbf{x})$ 表示關聯性，輸入 $\mathbf{x}$ 、輸出 $y$ ，原文中提到:</p>
+<blockquote>
+<p>…,which should for the time being be thought of as some collection of numerical measurements. (原文)</p>
+</blockquote>
+<p>因此，在這邊直接用 $\mathbb{X}, \mathbb{Y}$ 表示其<br>屬於的集合。</p>
+<blockquote>
+<p>The true relationship $f$ is <em>unknown</em> to us, and our aim is to recover it as well as we can from data. (原文)</p>
+</blockquote>
+<p>然而， $f$ 是<font color="#FF8C00"><strong><em>未知(unknown)</em></strong></font>的，要找出真實的 $f$ 需耗費的代價非常大，而且多數時候根本無法找到。因此，機器學習的方法藉由從已知的資料中找出其相關性，近似此未知的函數映射。</p>
+<blockquote>
+<p>Given the dataset $\mathcal{D}={(\mathbf{x}<em>i,y_i)}^n</em>{i=1}$, where each pair $(\mathbf{x}_i,y_i)$ is an example of input-output mapping, and we want to find a function $\hat{y}=h(\mathbf{x})$ that should approximate $f$ by learning from this dataset. The function $h$ is called <strong><em>hypothesis</em></strong>.</p>
+</blockquote>
+<p>通常我們會有一筆資料集，在 Regression tasks 中，這筆資料集會包含輸入的特徵(feature) $\mathbf{x}_i$ 與其成對的輸出目標值(target) $y_i$。 然後，我們從資料集中找出映射 $h$ 用來近似函數 $f$，這項映射函數被稱為 <font color="#FF8C00"><strong><em>hypothesis</em></strong></font>，意指對於 $f$ 的假設。</p>
+<p>從統計學的角度來看，這筆資料集就是對於母體的抽樣，意味著當資料集越大越廣泛，就越能接近真實世界的情況。因此，從抽樣取得得資料集內學習到的關聯性，當資料集越大時，越有機會近似真實的 $f$。( <strong><em>hypothesis</em></strong> 的選擇也會有關鍵性的影響。)</p>
+<blockquote>
+<p>Since learning arbitrary functions is intractable, we restrict ourselves to some <strong><em>hypothesis class</em></strong> $\mathcal{H}$ of allowable functions. (原文)</p>
+</blockquote>
+<h2 id="名詞"><a href="#名詞" class="headerlink" title="名詞"></a>名詞</h2><ul>
+<li><strong>regression</strong></li>
+<li><strong>hypothesis</strong></li>
+<li><strong>hypothesis class</strong></li>
+<li><strong>parametric model</strong></li>
+<li><strong>parameters/weights</strong></li>
+<li><strong>cost function</strong></li>
+</ul>
+<h2 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h2><p>講義第五頁，CH1 Regression I 的前言。</p>
+
         </div>
 
         
