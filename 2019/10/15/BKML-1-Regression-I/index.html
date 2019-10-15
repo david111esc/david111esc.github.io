@@ -258,7 +258,14 @@
 <blockquote>
 <p>Since learning arbitrary functions is intractable, we restrict ourselves to some <strong><em>hypothesis class</em></strong> $\mathcal{H}$ of allowable functions. (原文)</p>
 </blockquote>
-<p>要描述 $\mathbb{X}$ 到 $\mathbb{Y}$ 之間映射函數的方法非常多，若沒有進行範圍上的限制，找尋函數 $h$ 的過程會困難且發散。因此，我們會進行規範在給定的集合內尋找，這個集合就是  <font color="#FF8C00"><strong><em>hypothesis class\space</em></strong></font>。</p>
+<p>要描述 $\mathbb{X}$ 到 $\mathbb{Y}$ 之間映射函數的方法非常多，若沒有進行範圍上的限制，找尋函數 $h$ 的過程會困難且發散。因此，我們會進行規範在給定的集合內尋找，這個集合就是  <font color="#FF8C00"><strong><em>hypothesis class/space</em></strong></font>。</p>
+<blockquote>
+<p>…, we typically employ a <strong><em>parametric model</em></strong>, meaning that there is some finite-dimensional vector $\mathbf{w} \in \mathbb{R}^d$, the elements of which are known as <strong><em>parameters</em></strong> or <strong><em>weights</em></strong>,that controls the behavior of the function. (原文)</p>
+</blockquote>
+<p>更進一步，把範圍限縮到所謂的 <font color="#FF8C00"><strong><em>parametric model</em></strong></font>，也就是函數會隨著參數 $\mathbf{w}$ 變化。原文中 $\mathbf{w} \in \mathbb{R}^d$，維度與 $\mathbf{x}$ ，不過也有許多情形下不一定相等(e.g. Neural Network)，因此這邊應該只是符號上使用不夠嚴謹。<br>另外，相對於 <strong><em>parametric model</em></strong>，當然也存在無須參數的 <strong><em>non-parametric model</em></strong>，這部分界定有時候很模糊，但絕大部分 lazy learning 或 instance-based 的模型都包含其中(e.g. KNN)。</p>
+<blockquote>
+<p>We can rewrite the equation as follow:<br>$$<br>h_{\mathbf{w}}(\mathbf{x}) = g(\mathbf{x},\mathbf{w})<br>$$<br>Then, the hypothesis class can be represented by the set of functions which depends on the possible choices of the parameters $\mathbf{w}$.<br>$$<br>\mathcal{H}={h_{\mathbf{w}}|\mathbf{w}\in \mathbb{R}^d}<br>$$</p>
+</blockquote>
 <h2 id="名詞"><a href="#名詞" class="headerlink" title="名詞"></a>名詞</h2><ul>
 <li><strong>regression</strong></li>
 <li><strong>hypothesis</strong></li>
@@ -271,7 +278,8 @@
 </li>
 </ul>
 <p>–&gt;</p>
-<h2 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h2><p>講義第五頁，CH1 Regression I 的前言。</p>
+<h2 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h2><p><strong>[CS189] UC Berkeley Machine Learning Course</strong><br><a href="https://www.eecs189.org/static/resources/comprehensive-guide.pdf">https://www.eecs189.org/static/resources/comprehensive-guide.pdf</a><br>講義第五頁，CH1 Regression I 的前言。</p>
+<h2 id="延伸閱讀"><a href="#延伸閱讀" class="headerlink" title="延伸閱讀"></a>延伸閱讀</h2><p><strong>A few useful things to Know about machine Learning</strong><br><a href="https://homes.cs.washington.edu/~pedrod/papers/cacm12.pdf">https://homes.cs.washington.edu/~pedrod/papers/cacm12.pdf</a><br>此篇前面對於機器學習的定義與這邊相同且更為完整。</p>
 --></li></ul>
         </div>
 
