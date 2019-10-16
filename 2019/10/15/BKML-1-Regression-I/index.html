@@ -253,7 +253,7 @@
 <blockquote>
 <p>Given the dataset $\mathcal{D}= \lbrace(\mathbf{x}_i,y_i)|\mathbf{x}_i \in \mathbb{X}, y_i \in \mathbb{Y}, i \in 1..n \rbrace$ , where each pair $(\mathbf{x}_i,y_i)$ is an example of input-output mapping, and we want to find a function $\hat{y}=h(\mathbf{x})$ that should approximate $f$ by learning from this dataset. The function $h$ is called <strong><em>hypothesis</em></strong>.</p>
 </blockquote>
-<p>通常我們會有一筆資料集，在 Regression tasks 中，這筆資料集會包含輸入的特徵(feature) $\mathbf{x}_i$ 與其成對的輸出目標值(target) $y_i$。 然後，我們從資料集中找出映射 $h$ 用來近似函數 $f$，這項映射函數被稱為 <font color="#FF8C00"><strong><em>hypothesis</em></strong></font>，意指對於 $f$ 的假設。</p>
+<p>通常我們會有一筆資料集，在 Regression tasks 中，這筆資料集會包含輸入的特徵(feature) $\mathbf{x}_i$ 與其成對的輸出目標值(target) $y_i$。 然後，我們從資料集中找出映射 $h$ 用來近似函數 $f$，這項映射函數被稱為 <font color="#FF8C00"><strong><em>hypothesis</em></strong></font>，意指對於 $f$ 的假設。(注意:這邊 $\hat{y}$ 是函數 $h(\mathbf{x})$ 的輸出，和 $y=f(\hat{x})$ 不同)</p>
 <p>從統計學的角度來看，這筆資料集就是對於母體的抽樣，意味著當資料集越大越廣泛，就越能接近真實世界的情況。因此，從抽樣取得得資料集內學習到的關聯性，當資料集越大時，越有機會近似真實的 $f$。( <strong><em>hypothesis</em></strong> 的選擇也會有關鍵性的影響。)</p>
 <blockquote>
 <p>Since learning arbitrary functions is intractable, we restrict ourselves to some <strong><em>hypothesis class</em></strong> $\mathcal{H}$ of allowable functions. (原文)</p>
@@ -262,9 +262,13 @@
 <blockquote>
 <p>…, we typically employ a <strong><em>parametric model</em></strong>, meaning that there is some finite-dimensional vector $\mathbf{w} \in \mathbb{R}^d$, the elements of which are known as <strong><em>parameters</em></strong> or <strong><em>weights</em></strong>,that controls the behavior of the function. (原文)</p>
 </blockquote>
-<p>更進一步，把範圍限縮到所謂的 <font color="#FF8C00"><strong><em>parametric model</em></strong></font>，也就是函數會隨著參數 $\mathbf{w}$ 變化。原文中 $\mathbf{w} \in \mathbb{R}^d$，維度與 $\mathbf{x}$ ，不過也有許多情形下不一定相等(e.g. Neural Network)，因此這邊應該只是符號上使用不夠嚴謹。<br>另外，相對於 <strong><em>parametric model</em></strong>，當然也存在無須參數的 <strong><em>non-parametric model</em></strong>，這部分界定有時候很模糊，但絕大部分 lazy learning 或 instance-based 的模型都包含其中(e.g. KNN)。</p>
+<p>更進一步，把範圍限縮到所謂的 <font color="#FF8C00"><strong><em>parametric model</em></strong></font>，也就是函數會隨著參數 $\mathbf{w}$ 變化。原文中 $\mathbf{w} \in \mathbb{R}^d$，維度與 $\mathbf{x}$ ，不過也有許多情形下不一定相等(e.g. Neural Network)，因此這邊應該只是符號上使用不夠嚴謹，改寫成 $\mathbb{R}^{d_\mathbf{w}}$ 較佳。<br>另外，相對於 <strong><em>parametric model</em></strong>，當然也存在無須參數的 <strong><em>non-parametric model</em></strong>，這部分界定有時候很模糊，但絕大部分 lazy learning 或 instance-based 的模型都包含其中(e.g. KNN)。</p>
 <blockquote>
 <p>We can rewrite the equation as follow:<br>$$<br>h_{\mathbf{w}}(\mathbf{x}) = g(\mathbf{x},\mathbf{w})<br>$$<br>Then, the hypothesis class can be represented by the set of functions which depends on the possible choices of the parameters $\mathbf{w}$.<br>$$<br>\mathcal{H}=\lbrace h_{\mathbf{w}}|\mathbf{w}\in \mathbb{R}^d \rbrace<br>$$</p>
+</blockquote>
+<p>我們可以將 $h$ 表示成基於參數 $\mathbf{w}$ 的函數，或是用定義域(domain)擴增為 $\mathbb{X} \times \mathbb{R}^{d_\mathbf{w}}$ 的函數 $g$。同時，也能具體將 $\mathcal{H}$ 寫成用 $\mathbf{w}$ 定義的集合。</p>
+<blockquote>
+<p>Finally, we can formulate an optimization problem by designating a cost(or loss) function $L$,<br>$$<br> \min_{\mathbf{w}} L(\mathbf{w})<br>$$<br>Also, the optimal parameter is as follow,<br>$$<br>\mathbf{w}^* = \arg\min_{\mathbf{w}} L(\mathbf{w})<br>$$ </p>
 </blockquote>
 <h2 id="名詞"><a href="#名詞" class="headerlink" title="名詞"></a>名詞</h2><ul>
 <li><strong>regression</strong></li>
@@ -278,6 +282,14 @@
 </li>
 </ul>
 <p>–&gt;</p>
+<h2 id="總結"><a href="#總結" class="headerlink" title="總結"></a>總結</h2><ol>
+<li>機器學習問題是為了找出資料間的關聯性(relationship)。</li>
+<li>由於關聯性是未知的(unknown)，因此用函數去近似，稱作 hypothesis。</li>
+<li>近似函數會基於擁有的資料集(dataset)去學習。</li>
+<li>我們將函數的選取範圍限制在集合 hypothesis class 內，避免太過於發散導致學習困難。</li>
+<li>其中一類參數化模型(parametric model)的函數相依於參數(parameters/weights)變數，因此可以將 hypothesis class 改寫成以參數表示的集合。</li>
+<li>最後，根據選定的代價函數(cost function)，度量利用資料集學習出來的映射函數，藉此找出最佳的參數。</li>
+</ol>
 <h2 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h2><p><strong>[CS189] UC Berkeley Machine Learning Course</strong><br><a href="https://www.eecs189.org/static/resources/comprehensive-guide.pdf">https://www.eecs189.org/static/resources/comprehensive-guide.pdf</a><br>講義第五頁，CH1 Regression I 的前言。</p>
 <h2 id="延伸閱讀"><a href="#延伸閱讀" class="headerlink" title="延伸閱讀"></a>延伸閱讀</h2><p><strong>A few useful things to Know about machine Learning</strong><br><a href="https://homes.cs.washington.edu/~pedrod/papers/cacm12.pdf">https://homes.cs.washington.edu/~pedrod/papers/cacm12.pdf</a><br>此篇前面對於機器學習的定義與這邊相同且更為完整。</p>
 --></li></ul>
