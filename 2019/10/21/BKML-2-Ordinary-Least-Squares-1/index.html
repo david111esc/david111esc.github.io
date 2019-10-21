@@ -7,7 +7,7 @@
 
 
 
-<title>BKML-0-柏克萊ML課程筆記目錄 | Hexo</title>
+<title>BKML-2-Ordinary-Least-Squares-1 | Hexo</title>
 
 
 
@@ -34,6 +34,44 @@
 
     
     
+        
+            <!-- MathJax配置，可通过单美元符号书写行内公式等 -->
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+    "HTML-CSS": {
+        preferredFont: "TeX",
+        availableFonts: ["STIX","TeX"],
+        linebreaks: { automatic:true },
+        EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50)
+    },
+    tex2jax: {
+        inlineMath: [ ["$", "$"], ["\\(","\\)"] ],
+        processEscapes: true,
+        ignoreClass: "tex2jax_ignore|dno",
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+        equationNumbers: { autoNumber: "AMS" },
+        noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } },
+        Macros: { href: "{}" }
+    },
+    messageStyle: "none"
+    });
+</script>
+<!-- 给MathJax元素添加has-jax class -->
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+<!-- 通过连接CDN加载MathJax的js代码 -->
+<script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML">
+</script>
+
+
         
     
 
@@ -169,7 +207,7 @@
     
     <article class="post-wrap">
         <header class="post-header">
-            <h1 class="post-title">BKML-0-柏克萊ML課程筆記目錄</h1>
+            <h1 class="post-title">BKML-2-Ordinary-Least-Squares-1</h1>
             
                 <div class="post-meta">
                     
@@ -178,7 +216,7 @@
 
                     
                         <span class="post-time">
-                        Date: <a href="#">October 15, 2019&nbsp;&nbsp;9:52:34</a>
+                        Date: <a href="#">October 21, 2019&nbsp;&nbsp;9:45:34</a>
                         </span>
                     
                     
@@ -194,11 +232,29 @@
         </header>
 
         <div class="post-content">
-            <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>此系列希望藉由閱讀 UC Berkeley CS189 課程的講義，對 Machine Learning 進行簡單的回顧，加深印象並補上之前缺漏的知識。</p>
-<h2 id="目錄"><a href="#目錄" class="headerlink" title="目錄"></a>目錄</h2><ol>
-<li>BKML-1 Regression I<h2 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h2></li>
-</ol>
-<p><strong>[CS189] UC Berkeley Machine Learning Course</strong><br><a href="https://www.eecs189.org/static/resources/comprehensive-guide.pdf" target="_blank" rel="noopener">https://www.eecs189.org/static/resources/comprehensive-guide.pdf</a></p>
+            <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>本篇主要會介紹 Ordinary Least Squares(OLS)，也就是最常見的迴歸問題之一。這篇希望改以筆記重點式來撰寫，目的是要讓未來自己回顧的時候，能快速掌握相關知識，因此著重概念性、啟發性等部分，或者一些知識上的手筋、Key point。詳細更進一步的內容，則需要再從上進行深入的閱讀。</p>
+<h2 id="主題"><a href="#主題" class="headerlink" title="主題"></a>主題</h2><h3 id="1-Ordinary-Least-Squares-OLS"><a href="#1-Ordinary-Least-Squares-OLS" class="headerlink" title="1. Ordinary Least Squares(OLS)"></a><strong>1. Ordinary Least Squares(OLS)</strong></h3><p>Ordinary least square(OLS) 是一種基於<font color="#FF8C00"><strong>平方誤差(squared error)</strong></font> 簡單的 <font color="#FF8C00"><strong>線性迴歸(Linear Regression)</strong></font>問題。</p>
+<h4 id="Linear-Regression"><a href="#Linear-Regression" class="headerlink" title="Linear Regression"></a><strong>Linear Regression</strong></h4><p>所謂線性迴歸代表使用了線性函數進行近似擬合，因此其函數型態可以寫成如下:<br>$$<br>y_i \approx \hat{y}<em>i = h_\mathbf{w}(\mathbf{x}_i)=\mathbf{x}_i^\top\mathbf{w}, \forall i=1,..,n<br>$$<br>這邊 $n$ 代表要被擬合的資料總筆數，若用矩陣表示則如下:<br>$$<br>\underbrace{<br>\left[<br>\begin{matrix}<br>y_1\<br>.\<br>.\<br>.\<br>y_n<br>\end{matrix}<br>\right]<br>}</em>{\mathbf{y}<em>{n \times 1}}<br>\approx<br>\underbrace{<br>\left[<br>\begin{matrix}<br>\mathbf{x}_1^\top\<br>.\<br>.\<br>.\<br>\mathbf{x}_n^\top<br>\end{matrix}<br>\right]<br>}</em>{\mathbf{X}_{n\times d}}</p>
+<p>\underbrace{<br>\left[<br>\begin{matrix}<br>\mathbf{w}<em>1\<br>.\<br>.\<br>.\<br>\mathbf{w}_n<br>\end{matrix}<br>\right]<br>}</em>{\mathbf{w}_{d \times 1}}<br>$$</p>
+<p>寫成矩陣表示需注意的重點 (1) rows $\times$ columns 的配對、(2) 是否需要轉置。這邊矩陣 $\mathbf{X} \in \mathbb{R}^{n \times d}$ 又被稱作 <font color="#FF8C00"><strong>design matrix</strong> </font> ，每條 row (橫向)都是一筆資料 $\mathbf{x}_i$，每筆資料的維度是 $d$ ，共有 $n$ 筆。<br>在機器學習領域中，通常我們考慮的大數據問題時，會是 $n \ge d$ 的情況，在線性代數中被稱作 overdetermined，代表方程式數量比要求的變數多，而這種情形往往沒有真確解，因此退而求其次，尋找 <font color="#FF8C00"><strong>近似解(approximate solution)</strong></font>。</p>
+<h4 id="Least-Squares"><a href="#Least-Squares" class="headerlink" title="Least Squares"></a><strong>Least Squares</strong></h4><p>於是我們選定使用 <font color="#FF8C00"><strong>平方誤差(squared error)</strong></font> 的和作為代價函數(cost function)，可以寫成如下表示:<br>$$<br>L(\mathbf{w}) = \sum^n_{i=1}(\mathbf{x}<em>i^\top \mathbf{w}-u=y_i)^2 = \min</em>{\mathbf{w}} |\mathbf{X}\mathbf{w} -\mathbf{y} |^2_2<br>$$<br>根據此方程式就能解一道最佳化問題，而且，在OLS問題表示式的架構之下，最佳解 $\mathbf{w}^<em>_{OLS}$ 有 <font color="#FF8C00">*</font></em>解析解(closed-form expression)**，換句話說，最佳解的方程表示式能被直接寫出來。</p>
+<h2 id="名詞"><a href="#名詞" class="headerlink" title="名詞"></a>名詞</h2><ul>
+<li><strong>Ordinary Least Squares(OLS)</strong></li>
+<li><strong>Linear Regression</strong></li>
+<li><strong>Design Matrix</strong></li>
+<li><strong>Overdetermined</strong></li>
+<li><strong>Approximate solution</strong></li>
+<li><strong>Squared error</strong></li>
+<li><strong>Closed-form expression</strong></li>
+</ul>
+<h2 id="總結"><a href="#總結" class="headerlink" title="總結"></a>總結</h2><ul>
+<li>OLS 是在建構線性迴歸模型(Linear Regression Model)。</li>
+<li>此問題的 Design Matrix 通常是 Overdetermined，也就是資料筆數大於維度。</li>
+<li>沒有真確解情況下，考慮求近似解。</li>
+<li>選擇平方誤差(squared error)作為代價函數(cost function)來度量擬合的好壞，建構出最佳化問題。</li>
+<li>這道最佳化問題的最佳解(optimal solution)可以被寫成解析解(closed-form expression)形式。</li>
+</ul>
+<h2 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h2><p><strong>[CS189] UC Berkeley Machine Learning Course</strong><br><a href="https://www.eecs189.org/static/resources/comprehensive-guide.pdf" target="_blank" rel="noopener">https://www.eecs189.org/static/resources/comprehensive-guide.pdf</a><br>講義第六頁，CH1.1。</p>
 
         </div>
 
@@ -213,7 +269,7 @@
                 
                     <p class="copyright-item">
                         <span>Permalink:</span>
-                        <span><a href="https://david111esc.github.io/2019/10/15/BKML-0-柏克萊ML課程筆記目錄/">https://david111esc.github.io/2019/10/15/BKML-0-柏克萊ML課程筆記目錄/</a></span>
+                        <span><a href="https://david111esc.github.io/2019/10/21/BKML-2-Ordinary-Least-Squares-1/">https://david111esc.github.io/2019/10/21/BKML-2-Ordinary-Least-Squares-1/</a></span>
                     </p>
                 
                 
@@ -239,7 +295,7 @@
                     
                         <a href="/tags/Machine-Learning/"># Machine Learning</a>
                     
-                        <a href="/tags/Directory/"># Directory</a>
+                        <a href="/tags/Regression/"># Regression</a>
                     
                         
                 </span>
@@ -252,10 +308,8 @@
         </section>
         <section class="post-nav">
             
-                <a class="prev" rel="prev" href="/2019/10/21/BKML-2-Ordinary-Least-Squares-1/">BKML-2-Ordinary-Least-Squares-1</a>
             
-            
-            <a class="next" rel="next" href="/2019/10/15/BKML-1-Regression-I/">BKML-1 Regression I</a>
+            <a class="next" rel="next" href="/2019/10/15/BKML-0-柏克萊ML課程筆記目錄/">BKML-0-柏克萊ML課程筆記目錄</a>
             
         </section>
 
