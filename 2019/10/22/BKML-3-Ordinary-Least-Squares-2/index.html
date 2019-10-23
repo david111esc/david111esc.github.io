@@ -247,8 +247,14 @@
 <li>確保最佳解存在性</li>
 </ol>
 <p>在OLS的問題中，目標函數 $L(\mathbf{w})$ 為凸函數(Convex Function)，因此，能夠確保最佳解 $\mathbf{w}^*$ 的存在。</p>
-<h4 id="推導"><a href="#推導" class="headerlink" title="推導"></a><strong>推導</strong></h4><h5 id="1-矩陣微分運算"><a href="#1-矩陣微分運算" class="headerlink" title="1. 矩陣微分運算"></a>1. 矩陣微分運算</h5><p>簡單回顧一下矩陣的微分運算:<br>$$<br>\nabla_{\mathbf{x}}(\mathbf{a}^{\top}\mathbf{x})=\mathbf{a}<br>$$<br>$$<br>\nabla_{\mathbf{x}}(\mathbf{x}^{\top}\mathbf{A}\mathbf{x}) = (\mathbf{A}+\mathbf{A}^{\top})\mathbf{x}<br>$$</p>
-<h5 id="2-最佳解表示式推導"><a href="#2-最佳解表示式推導" class="headerlink" title="2. 最佳解表示式推導"></a>2. 最佳解表示式推導</h5><p>根據前面討論，考慮存在最佳解使得方程式 $\nabla L(\mathbf{w}^{*}_{OLS})=\mathbf{0}$ 成立，則先將原本的代價函數進行展開:</p>
+<h4 id="推導"><a href="#推導" class="headerlink" title="推導"></a><strong>推導</strong></h4><ol>
+<li>矩陣微分運算</li>
+</ol>
+<p>簡單回顧一下矩陣的微分運算:<br>$$<br>\nabla_{\mathbf{x}}(\mathbf{a}^{\top}\mathbf{x})=\mathbf{a}<br>$$<br>$$<br>\nabla_{\mathbf{x}}(\mathbf{x}^{\top}\mathbf{A}\mathbf{x}) = (\mathbf{A}+\mathbf{A}^{\top})\mathbf{x}<br>$$</p>
+<ol start="2">
+<li>最佳解表示式推導</li>
+</ol>
+<p>根據前面討論，考慮存在最佳解使得方程式 $\nabla L(\mathbf{w}^{*}_{OLS})=\mathbf{0}$ 成立，則先將原本的代價函數進行展開:</p>
 <p>$$<br>\begin{aligned}<br>L(\mathbf{w})&amp;=||\mathbf{X}\mathbf{w}-\mathbf{Y}||^2_2 \\<br>&amp;=(\mathbf{X}\mathbf{w}-\mathbf{y})^{\top}(\mathbf{X}\mathbf{w}-\mathbf{y})\\<br>&amp;=(\mathbf{X}\mathbf{w})^{\top}\mathbf{X}\mathbf{w} - (\mathbf{X}\mathbf{w})^{\top}\mathbf{y} - \mathbf{y}^{\top}\mathbf{X}\mathbf{w} + \mathbf{y}^{\top}\mathbf{y}\\<br>&amp;=\mathbf{w}^{\top}\mathbf{X}^{\top}\mathbf{X}\mathbf{w} - 2\mathbf{w}^{\top}\mathbf{X}^{\top}\mathbf{y} + \mathbf{y}^{\top}\mathbf{y}<br>\end{aligned}<br>$$</p>
 <p>接著進行梯度運算,</p>
 <p>$$<br>\begin{aligned}<br>\nabla L(\mathbf{w}) &amp;= \nabla_{\mathbf{w}}(\mathbf{w}^{\top}\mathbf{X}^{\top}\mathbf{X}\mathbf{w} - 2\mathbf{w}^{\top}\mathbf{X}^{\top}\mathbf{y} + \mathbf{y}^{\top}\mathbf{y}) \\<br>&amp;=\nabla_{\mathbf{w}}(\mathbf{w}^{\top}\mathbf{X}^{\top}\mathbf{X}\mathbf{w}) - \nabla_{\mathbf{w}}(2\mathbf{w}^{\top}\mathbf{X}^{\top}\mathbf{y}) + \underbrace{\nabla_{\mathbf{w}}(\mathbf{y}^{\top}\mathbf{y})}_0 \\<br>&amp;= 2\mathbf{X}^{\top}\mathbf{X} - 2\mathbf{X}^{\top}\mathbf{y}<br>\end{aligned}<br>$$</p>
