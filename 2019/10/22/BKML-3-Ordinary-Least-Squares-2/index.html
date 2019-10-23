@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta name="generator" content="Hexo 3.9.0">
+    <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+
+
+<title>BKML-3-Ordinary-Least-Squares-2 | Hexo</title>
+
+
+
+    <link rel="icon" href="/favicon.ico">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+
+
+
+    
+    
+        
+            <!-- MathJax配置，可通过单美元符号书写行内公式等 -->
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+    "HTML-CSS": {
+        preferredFont: "TeX",
+        availableFonts: ["STIX","TeX"],
+        linebreaks: { automatic:true },
+        EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50)
+    },
+    tex2jax: {
+        inlineMath: [ ["$", "$"], ["\\(","\\)"] ],
+        processEscapes: true,
+        ignoreClass: "tex2jax_ignore|dno",
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+        equationNumbers: { autoNumber: "AMS" },
+        noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } },
+        Macros: { href: "{}" }
+    },
+    messageStyle: "none"
+    });
+</script>
+<!-- 给MathJax元素添加has-jax class -->
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+<!-- 通过连接CDN加载MathJax的js代码 -->
+<script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML">
+</script>
+
+
+        
+    
+
+
+</head>
+<body>
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">david111esc&#39;s Blog</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Categories</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div>
+
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">david111esc&#39;s Blog</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Categories</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+        <div class="main">
+            <div class="container">
+    
+    
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
+        <a onclick="go_top()">Back to top</a>
+        <a onclick="go_bottom()">Go to bottom</a>
+    </div>
+</div>
+
+<script>
+    document.ready(
+        function () {
+            tocbot.init({
+                tocSelector: '.tocbot-list',
+                contentSelector: '.post-content',
+                headingSelector: 'h1, h2, h3, h4, h5',
+                collapseDepth: 1,
+                orderedList: false,
+                scrollSmooth: true,
+            })
+        }
+    )
+
+    function expand_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 6,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "collapse_toc()");
+        b.innerHTML = "Collapse all"
+    }
+
+    function collapse_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 1,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "expand_toc()");
+        b.innerHTML = "Expand all"
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+</script>
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">BKML-3-Ordinary-Least-Squares-2</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">Hilbert SYU</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">October 22, 2019&nbsp;&nbsp;13:20:04</a>
+                        </span>
+                    
+                    
+                        <span class="post-category">
+                    Category:
+                            
+                                <a href="/categories/Berkeley-ML-筆記/">Berkeley ML 筆記</a>
+                            
+                        </span>
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>本篇將會接續上一篇，介紹如何求得OLS的最佳解。前面提到OLS問題有解析解(closed-form expression)，所以我們將會根據此問題的目標函數，從兩種不同的角度切入求解，並且進行公式推導，最終得出最佳解的表達式。</p>
+<h2 id="主題"><a href="#主題" class="headerlink" title="主題"></a>主題</h2><h3 id="Ordinary-Least-Squares-OLS"><a href="#Ordinary-Least-Squares-OLS" class="headerlink" title="Ordinary Least Squares(OLS)"></a><strong>Ordinary Least Squares(OLS)</strong></h3><p>接續前篇，我們將OLS最佳化問題的目標函數建構出來如下:<br>$$<br>L(\mathbf{w})= \sum^n_{i=1} (\mathbf{x}^{\top}_i \mathbf{w} - y_i)^2 = \min_\mathbf{w} || \mathbf{X} \mathbf{w} - \mathbf{y}||^2_2<br>$$</p>
+<h3 id="Vector-Calculus"><a href="#Vector-Calculus" class="headerlink" title="Vector Calculus"></a><strong>Vector Calculus</strong></h3><p>第一種求解的方式是使用向量微積分(Vector Calculus)的技巧，直接對目標函數對參數進行微分求解。</p>
+<h4 id="概念"><a href="#概念" class="headerlink" title="概念"></a><strong>概念</strong></h4><ol>
+<li>何謂梯度(Gradient)?</li>
+</ol>
+<p>首先介紹多變數函數向量微分中的梯度(Gradient)算子(Operator)，符號上我們會使用 $\nabla$(nabla)表示梯度運算。假設給定連續可微的函數 $F:\mathbf{x}\in\mathbb{R}^d \rightarrow \mathbb{R}$，那麼梯度的運算是對多變數函數各變數分別進行偏微分:<br>$$<br>\nabla F(\mathbf{x}) = \left[\begin{matrix}<br>\frac{\partial f}{\partial x_1} \\<br>\vdots\\<br>\frac{\partial f}{\partial x_d}<br>\end{matrix}\right]<br>$$<br>意義上，<font color="#FF8C00">代表著函數在該點變化率最大的方向</font>，這項結論可以從方向導數的定義去推得。</p>
+<ol start="2">
+<li>梯度等於0代表的意義?</li>
+</ol>
+<p>$\nabla F(\mathbf{a})=\mathbf{0}$ ，意味著所有方向的偏導數都是0，則該點可被稱作 <font color="#FF8C00">駐點(Stationary Point)</font> 或 <font color="#FF8C00">臨界點(Critical Point)</font> <sup><a href="#J1">註1</a></sup>。<br>在這其中包含三種狀況:區域最大值(Local maximum)、區域最小值(Local minimum)、鞍點(Saddle Point)，而我們所要找的最佳解主要發生在區域極值，也就是前兩者之中，根據不同的 cost function 定義尋找極大或極小值發生的位置。</p>
+<ol start="3">
+<li>確保最佳解存在性</li>
+</ol>
+<p>在OLS的問題中，目標函數 $L(\mathbf{w})$ 為凸函數(Convex Function)，因此，能夠確保最佳解 $\mathbf{w}^*$ 的存在。</p>
+<h4 id="推導"><a href="#推導" class="headerlink" title="推導"></a><strong>推導</strong></h4><h5 id="1-矩陣微分運算"><a href="#1-矩陣微分運算" class="headerlink" title="1. 矩陣微分運算"></a>1. 矩陣微分運算</h5><p>簡單回顧一下矩陣的微分運算:<br>$$<br>\nabla_{\mathbf{x}}(\mathbf{a}^{\top}\mathbf{x})=\mathbf{a}<br>$$<br>$$<br>\nabla_{\mathbf{x}}(\mathbf{x}^{\top}\mathbf{A}\mathbf{x}) = (\mathbf{A}+\mathbf{A}^{\top})\mathbf{x}<br>$$</p>
+<h5 id="2-最佳解表示式推導"><a href="#2-最佳解表示式推導" class="headerlink" title="2. 最佳解表示式推導"></a>2. 最佳解表示式推導</h5><p>根據前面討論，考慮存在最佳解使得方程式 $\nabla L(\mathbf{w}^{*}_{OLS})=\mathbf{0}$ 成立，則先將原本的代價函數進行展開:</p>
+<p>$$<br>\begin{aligned}<br>L(\mathbf{w})&amp;=||\mathbf{X}\mathbf{w}-\mathbf{Y}||^2_2 \\<br>&amp;=(\mathbf{X}\mathbf{w}-\mathbf{y})^{\top}(\mathbf{X}\mathbf{w}-\mathbf{y})\\<br>&amp;=(\mathbf{X}\mathbf{w})^{\top}\mathbf{X}\mathbf{w} - (\mathbf{X}\mathbf{w})^{\top}\mathbf{y} - \mathbf{y}^{\top}\mathbf{X}\mathbf{w} + \mathbf{y}^{\top}\mathbf{y}\\<br>&amp;=\mathbf{w}^{\top}\mathbf{X}^{\top}\mathbf{X}\mathbf{w} - 2\mathbf{w}^{\top}\mathbf{X}^{\top}\mathbf{y} + \mathbf{y}^{\top}\mathbf{y}<br>\end{aligned}<br>$$</p>
+<p>接著進行梯度運算,</p>
+<p>$$<br>\begin{aligned}<br>\nabla L(\mathbf{w}) &amp;= \nabla_{\mathbf{w}}(\mathbf{w}^{\top}\mathbf{X}^{\top}\mathbf{X}\mathbf{w} - 2\mathbf{w}^{\top}\mathbf{X}^{\top}\mathbf{y} + \mathbf{y}^{\top}\mathbf{y}) \\<br>&amp;=\nabla_{\mathbf{w}}(\mathbf{w}^{\top}\mathbf{X}^{\top}\mathbf{X}\mathbf{w}) - \nabla_{\mathbf{w}}(2\mathbf{w}^{\top}\mathbf{X}^{\top}\mathbf{y}) + \underbrace{\nabla_{\mathbf{w}}(\mathbf{y}^{\top}\mathbf{y})}_0 \\<br>&amp;= 2\mathbf{X}^{\top}\mathbf{X} - 2\mathbf{X}^{\top}\mathbf{y}<br>\end{aligned}<br>$$</p>
+<p>其中我們利用到矩陣 $\mathbf{X}^{\top} \mathbf{X}$ 的 對稱(symmetry) 性質進行合併化簡，$\mathbf{X}^{\top} \mathbf{X} + (\mathbf{X}^{\top} \mathbf{X})^{\top} = 2 \mathbf{X}^{\top} \mathbf{X}$。</p>
+<p>當 $\nabla L(\mathbf{w}^{*}_{OLS})=\mathbf{0}$ 成立，則可以得到:</p>
+<p>$$<br>\mathbf{X}^{\top}\mathbf{X}\mathbf{w}^{*}_{OLS} = \mathbf{X}^{\top}\mathbf{y}<br>$$</p>
+<p>假如 $\mathbf{X}$ 是滿秩(full rank)<sup><a href="#J2">註2</a></sup>，那麼 $\mathbf{X}^{\top}\mathbf{X}$ 不僅是方陣也是滿秩，反矩陣(inverse matrix) 存在，因此可以求得:</p>
+<p>$$<br>\mathbf{w}^{*}_{OLS} = (\mathbf{X}^{\top}\mathbf{X})^{-1}\mathbf{X}\mathbf{y}<br>$$</p>
+<p>儘管如此，數值運算中通常不會直接計算$(\mathbf{X}^{\top}\mathbf{X})^{-1}$，而是會用一些數值運算的方法解線性系統(Linear system) 的問題。(e.g. Gaussian elimination)</p>
+<h4 id="討論"><a href="#討論" class="headerlink" title="討論"></a><strong>討論</strong></h4><p>回過頭來重新看一下前提的條件 $\nabla L(\mathbf{w}^{*}_{OLS})=\mathbf{0}$ ，事實上，這是一項 必要條件(necessary condition) 但卻不是 充分條件(sufficient condition)<sup><a href="#J3">註3</a></sup>。</p>
+<p>當 $L(\mathbf{w}^{*}_{OLS})$ 為極值(最大\最小值)的時候，梯度會為 $\mathbf{0}$，故為必要條件。但反之卻不然，梯度為 $\mathbf{0}$ 還有可能會是鞍點(saddle point)，所以此條件不是充分條件。</p>
+<p>不過，前面提到這邊使用的 目標函數(objective function) 是 凸函數(convex function)，確保了最佳解的存在，更進一步能推論得到是 全域最小值(global minimum)。<br>要證明目標函數$L$是凸函數有許多方法，最直觀的是從定義出發，但在這邊計算上會比較繁瑣，所以文章內用另一項性質進行證明:</p>
+<blockquote>
+<p>If <strong><em>Hessian</em></strong> of $L$ is <strong><em>positive semi-definite</em></strong>, then function $L$ is convex. </p>
+</blockquote>
+<p>如何計算Hessian呢? 只要進行兩次的 $\nabla$ 運算即可,</p>
+<p>$$<br>\nabla^2 L(\mathbf{w}) = 2\mathbf{X}^{\top}\mathbf{X}<br>$$</p>
+<p>半正定(Positive semi-definite)的部分則是直接從定義出發,</p>
+<p>$$<br>\forall \mathbf{w}, \mathbf{w}^{\top}(2\mathbf{X}^{\top}\mathbf{X})^{\top}\mathbf{w}=2(\mathbf{X}\mathbf{w})^{\top}\mathbf{X}\mathbf{w}=2||\mathbf{X}\mathbf{w}||^2_2 \ge 0<br>$$</p>
+<p>故可以證明目標函數 $L$ 是凸函數，進而確保前面推導的公式能求得我們所需要的最佳解。</p>
+<h3 id="Orthogonal-Projection"><a href="#Orthogonal-Projection" class="headerlink" title="Orthogonal Projection"></a><strong>Orthogonal Projection</strong></h3><h2 id="名詞"><a href="#名詞" class="headerlink" title="名詞"></a>名詞</h2><h2 id="總結"><a href="#總結" class="headerlink" title="總結"></a>總結</h2><h2 id="備註"><a href="#備註" class="headerlink" title="備註"></a>備註</h2><p><span id="J1">註1</span>: 臨界點(Critical Point)的定義中除了導數為零的點外，還包含了不可微分的點。<br><span id="J2">註2</span>: 由於前面<strong>假設資料量大於維度</strong> $n \ge d$，因此可以知道 $\mathbf{X}$ 明顯不是方陣，所以這邊的滿秩(full rank)指的是 row rank = column rank 的情況。<br><span id="J3">註3</span>: 若P則Q ($p\rightarrow q$)。其中P代表充分條件，意味著符合此條件能推得後面的結果; Q代表必要條件，意味著在此結果的情況下，必定符合此條件。</p>
+<h2 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h2><p><strong>[CS189] UC Berkeley Machine Learning Course</strong><br><a href="https://www.eecs189.org/static/resources/comprehensive-guide.pdf" target="_blank" rel="noopener">https://www.eecs189.org/static/resources/comprehensive-guide.pdf</a><br>講義第六到八頁，CH1.1。</p>
+
+        </div>
+
+        
+            <section class="post-copyright">
+                
+                    <p class="copyright-item">
+                        <span>Author:</span>
+                        <span>Hilbert SYU</span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>Permalink:</span>
+                        <span><a href="https://david111esc.github.io/2019/10/22/BKML-3-Ordinary-Least-Squares-2/">https://david111esc.github.io/2019/10/22/BKML-3-Ordinary-Least-Squares-2/</a></span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>License:</span>
+                        <span>Copyright (c) 2019 <a href="http://creativecommons.org/licenses/by-nc/4.0/">CC-BY-NC-4.0</a> LICENSE</span>
+                    </p>
+                
+                
+                     <p class="copyright-item">
+                         <span>Slogan:</span>
+                         <span>我來開條路，大家一起上來走，就這麼辦吧!</span>
+                     </p>
+                
+
+            </section>
+        
+        <section class="post-tags">
+            <div>
+                <span>Tag(s):</span>
+                <span class="tag">
+                    
+                    
+                        <a href="/tags/Machine-Learning/"># Machine Learning</a>
+                    
+                        <a href="/tags/Regression/"># Regression</a>
+                    
+                        <a href="/tags/Ordinary-Least-Squares/"># Ordinary Least Squares</a>
+                    
+                        <a href="/tags/OLS/"># OLS</a>
+                    
+                        <a href="/tags/Vector-Calculus/"># Vector Calculus</a>
+                    
+                        <a href="/tags/Orthogonal-Projection/"># Orthogonal Projection</a>
+                    
+                        
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">back</a>
+                <span>· </span>
+                <a href="/">home</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+            
+            <a class="next" rel="next" href="/2019/10/21/BKML-2-Ordinary-Least-Squares-1/">BKML-2-Ordinary-Least-Squares-1</a>
+            
+        </section>
+
+
+    </article>
+</div>
+
+        </div>
+        <footer id="footer" class="footer">
+    <div class="copyright">
+        <span>© Hilbert SYU | Powered by <a href="https://hexo.io" target="_blank">Hexo</a> & <a href="https://github.com/Siricee/hexo-theme-Chic" target="_blank">Chic</a></span>
+    </div>
+</footer>
+
+    </div>
+</body>
+</html>
