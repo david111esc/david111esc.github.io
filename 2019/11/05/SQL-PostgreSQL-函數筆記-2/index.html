@@ -1,0 +1,839 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta name="generator" content="Hexo 3.9.0">
+    <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+
+
+<title>[SQL]PostgreSQL 函數筆記-2 | Hexo</title>
+
+
+
+    <link rel="icon" href="/favicon.ico">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+
+
+
+    
+    
+        
+    
+
+
+</head>
+<body>
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">david111esc&#39;s Blog</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Categories</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div>
+
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">david111esc&#39;s Blog</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Categories</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+        <div class="main">
+            <div class="container">
+    
+    
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
+        <a onclick="go_top()">Back to top</a>
+        <a onclick="go_bottom()">Go to bottom</a>
+    </div>
+</div>
+
+<script>
+    document.ready(
+        function () {
+            tocbot.init({
+                tocSelector: '.tocbot-list',
+                contentSelector: '.post-content',
+                headingSelector: 'h1, h2, h3, h4, h5',
+                collapseDepth: 1,
+                orderedList: false,
+                scrollSmooth: true,
+            })
+        }
+    )
+
+    function expand_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 6,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "collapse_toc()");
+        b.innerHTML = "Collapse all"
+    }
+
+    function collapse_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 1,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "expand_toc()");
+        b.innerHTML = "Expand all"
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+</script>
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">[SQL]PostgreSQL 函數筆記-2</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">Hilbert SYU</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">November 5, 2019&nbsp;&nbsp;11:32:13</a>
+                        </span>
+                    
+                    
+                        <span class="post-category">
+                    Category:
+                            
+                                <a href="/categories/資料庫/">資料庫</a>
+                            
+                        </span>
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>本文將會介紹一些進階的SQL語法，能夠解決許多複雜或用基礎語法需多次Query的問題。</p>
+<ul>
+<li>TO_TSVECTOR</li>
+<li>TO_TSQUERY</li>
+<li>OVER ([PARTITION BY] [ORDER BY])</li>
+<li>ROW_NUMBER()</li>
+<li>RANK(), DENSE_RANK</li>
+</ul>
+<h1 id="主題"><a href="#主題" class="headerlink" title="主題"></a>主題</h1><h2 id="環境"><a href="#環境" class="headerlink" title="環境"></a>環境</h2><ul>
+<li>Database: PostgreSQL 10.6</li>
+<li>Client: DBeaver: 6.2.4</li>
+</ul>
+<h2 id="文本搜索"><a href="#文本搜索" class="headerlink" title="文本搜索"></a>文本搜索</h2><p>對於方面的函數使用其實還沒弄很懂，大致上的理解是用來優化文章、字串等搜索的性能，從自然語言的角度去將詞彙轉成向量，同時能夠兼容一些詞性變化、單複數等問題，會比起直接使用 LIKE, IN 更強大。但目前的使用在資料型態為 TEXT ，內容為標籤或代號的 column 中進行實測後，並沒有比起使用 LIKE, IN 更佳的效能表現。</p>
+<ul>
+<li>TO_TSVECTOR: 將文字型態轉成文本向量型態 <code>TSVECTOR</code></li>
+<li>TO_TSQUERY: 針對文本向量型態進行 Query 的 <code>TSQUERY</code></li>
+</ul>
+<table>
+<thead>
+<tr>
+<th align="center">no</th>
+<th align="center">animal_type</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">1</td>
+<td align="center">big dog</td>
+</tr>
+<tr>
+<td align="center">2</td>
+<td align="center">cute cat</td>
+</tr>
+<tr>
+<td align="center">3</td>
+<td align="center">blue bird</td>
+</tr>
+<tr>
+<td align="center">4</td>
+<td align="center">dog fish</td>
+</tr>
+<tr>
+<td align="center">5</td>
+<td align="center">monster</td>
+</tr>
+</tbody></table>
+<p>目前使用過的用法為下:</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span></span><br><span class="line"><span class="keyword">no</span>,</span><br><span class="line">TO_TSVECTOR(animal_type) @@ TO_TSQUERY(<span class="string">'dog|cat&amp;!fish'</span>)</span><br><span class="line"><span class="keyword">FROM</span> animals</span><br></pre></td></tr></table></figure>
+
+<p>將 animal_type 的 column 轉換成 TSVECTOR 型態，並且找出內容符合 dog 或 cat 但非 fish 的資料。<br>得到的結果應該會如下:</p>
+<table>
+<thead>
+<tr>
+<th align="center">no</th>
+<th align="center">animal_type</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">1</td>
+<td align="center">true</td>
+</tr>
+<tr>
+<td align="center">2</td>
+<td align="center">true</td>
+</tr>
+<tr>
+<td align="center">3</td>
+<td align="center">false</td>
+</tr>
+<tr>
+<td align="center">4</td>
+<td align="center">false</td>
+</tr>
+<tr>
+<td align="center">5</td>
+<td align="center">false</td>
+</tr>
+</tbody></table>
+<h2 id="OVER-子句"><a href="#OVER-子句" class="headerlink" title="OVER 子句"></a>OVER 子句</h2><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[FUNCTION] OVER ( [PARTITION BY   clause]</span><br><span class="line">                  [ORDER BY       clause])</span><br></pre></td></tr></table></figure>
+
+<p><strong>OVER 子句</strong>的使用，翻譯上被稱作 <strong><em>窗口函數</em></strong>，意思是前面的函數會根據 OVER 後面條件切割出來的窗口進行運算。<br><strong>PARTITION BY</strong> 的功能有點類似 <strong>GROUP BY</strong>，但 PARTITION BY 並不會將相同的類別合併成一項，這邊搭配後面會說到的編號函數解釋比較清楚。假設使用 <code>ROW_NUMBER() OVER (PARTITION BY sex) AS num</code> ，那麼就會根據不同性別(假設只有男、女)分別進行編號。</p>
+<table>
+<thead>
+<tr>
+<th>name</th>
+<th align="center">sex</th>
+<th align="right">salary</th>
+<th align="right">num</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Tom</td>
+<td align="center">M</td>
+<td align="right">500</td>
+<td align="right">1</td>
+</tr>
+<tr>
+<td>Peter</td>
+<td align="center">M</td>
+<td align="right">800</td>
+<td align="right">2</td>
+</tr>
+<tr>
+<td>Mary</td>
+<td align="center">F</td>
+<td align="right">1000</td>
+<td align="right">1</td>
+</tr>
+<tr>
+<td>Candy</td>
+<td align="center">F</td>
+<td align="right">1000</td>
+<td align="right">2</td>
+</tr>
+<tr>
+<td>John</td>
+<td align="center">M</td>
+<td align="right">800</td>
+<td align="right">3</td>
+</tr>
+</tbody></table>
+<h2 id="編碼函數"><a href="#編碼函數" class="headerlink" title="編碼函數"></a>編碼函數</h2><ul>
+<li>ROW_NUMBER(): 照順序從1開始往下編號。</li>
+<li>RANK(): 同類別的編號相同，後面的編號依據並列個數跳號。(e.g. 1,2,2,2,5,6,6,8)</li>
+<li>DENSE_RANK():  同類別的編號相同，後面的編號不跳號。(e.g. 1,2,2,2,3,4,4,5)</li>
+</ul>
+<p>實際例子:Table: employee\</p>
+<table>
+<thead>
+<tr>
+<th>name</th>
+<th align="center">sex</th>
+<th align="right">salary</th>
+<th align="right">department</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Tom</td>
+<td align="center">M</td>
+<td align="right">500</td>
+<td align="right">IT</td>
+</tr>
+<tr>
+<td>Peter</td>
+<td align="center">M</td>
+<td align="right">800</td>
+<td align="right">HR</td>
+</tr>
+<tr>
+<td>Mary</td>
+<td align="center">F</td>
+<td align="right">1000</td>
+<td align="right">HR</td>
+</tr>
+<tr>
+<td>Candy</td>
+<td align="center">F</td>
+<td align="right">1000</td>
+<td align="right">IT</td>
+</tr>
+<tr>
+<td>John</td>
+<td align="center">M</td>
+<td align="right">800</td>
+<td align="right">QA</td>
+</tr>
+<tr>
+<td>Jen</td>
+<td align="center">F</td>
+<td align="right">500</td>
+<td align="right">IT</td>
+</tr>
+<tr>
+<td>Amy</td>
+<td align="center">F</td>
+<td align="right">300</td>
+<td align="right">IT</td>
+</tr>
+</tbody></table>
+<h3 id="Case-A-依據薪水進行編號"><a href="#Case-A-依據薪水進行編號" class="headerlink" title="[Case A]: 依據薪水進行編號"></a>[Case A]: 依據薪水進行編號</h3><p>我們使用 <code>ORDER BY salary DESC</code> 將資料依據薪水高低排序，並以此進行編號。</p>
+<ul>
+<li><strong>ROW_NUMBER()</strong></li>
+</ul>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span></span><br><span class="line"><span class="keyword">name</span>, sex, salary, department,</span><br><span class="line">ROW_NUMBER() <span class="keyword">OVER</span>(<span class="keyword">ORDER</span> <span class="keyword">BY</span> salary <span class="keyword">DESC</span>) <span class="keyword">AS</span> <span class="keyword">no</span></span><br></pre></td></tr></table></figure>
+
+<table>
+<thead>
+<tr>
+<th>name</th>
+<th align="center">sex</th>
+<th align="right">salary</th>
+<th align="right">department</th>
+<th align="right">no</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Mary</td>
+<td align="center">F</td>
+<td align="right">1000</td>
+<td align="right">HR</td>
+<td align="right">1</td>
+</tr>
+<tr>
+<td>Candy</td>
+<td align="center">F</td>
+<td align="right">1000</td>
+<td align="right">IT</td>
+<td align="right">2</td>
+</tr>
+<tr>
+<td>Peter</td>
+<td align="center">M</td>
+<td align="right">800</td>
+<td align="right">HR</td>
+<td align="right">3</td>
+</tr>
+<tr>
+<td>John</td>
+<td align="center">M</td>
+<td align="right">800</td>
+<td align="right">QA</td>
+<td align="right">4</td>
+</tr>
+<tr>
+<td>Tom</td>
+<td align="center">M</td>
+<td align="right">500</td>
+<td align="right">IT</td>
+<td align="right">5</td>
+</tr>
+<tr>
+<td>Jen</td>
+<td align="center">F</td>
+<td align="right">500</td>
+<td align="right">IT</td>
+<td align="right">6</td>
+</tr>
+<tr>
+<td>Amy</td>
+<td align="center">F</td>
+<td align="right">300</td>
+<td align="right">IT</td>
+<td align="right">7</td>
+</tr>
+</tbody></table>
+<ul>
+<li><strong>RANK()</strong></li>
+</ul>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span></span><br><span class="line"><span class="keyword">name</span>, sex, salary, department,</span><br><span class="line"><span class="keyword">RANK</span>() <span class="keyword">OVER</span>(<span class="keyword">ORDER</span> <span class="keyword">BY</span> salary <span class="keyword">DESC</span>) <span class="keyword">AS</span> <span class="keyword">no</span></span><br></pre></td></tr></table></figure>
+
+<table>
+<thead>
+<tr>
+<th>name</th>
+<th align="center">sex</th>
+<th align="right">salary</th>
+<th align="right">department</th>
+<th align="right">no</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Mary</td>
+<td align="center">F</td>
+<td align="right">1000</td>
+<td align="right">HR</td>
+<td align="right">1</td>
+</tr>
+<tr>
+<td>Candy</td>
+<td align="center">F</td>
+<td align="right">1000</td>
+<td align="right">IT</td>
+<td align="right">1</td>
+</tr>
+<tr>
+<td>Peter</td>
+<td align="center">M</td>
+<td align="right">800</td>
+<td align="right">HR</td>
+<td align="right">3</td>
+</tr>
+<tr>
+<td>John</td>
+<td align="center">M</td>
+<td align="right">800</td>
+<td align="right">QA</td>
+<td align="right">3</td>
+</tr>
+<tr>
+<td>Tom</td>
+<td align="center">M</td>
+<td align="right">500</td>
+<td align="right">IT</td>
+<td align="right">5</td>
+</tr>
+<tr>
+<td>Jen</td>
+<td align="center">F</td>
+<td align="right">500</td>
+<td align="right">IT</td>
+<td align="right">5</td>
+</tr>
+<tr>
+<td>Amy</td>
+<td align="center">F</td>
+<td align="right">300</td>
+<td align="right">IT</td>
+<td align="right">7</td>
+</tr>
+</tbody></table>
+<ul>
+<li><strong>DENSE_RANK()</strong></li>
+</ul>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span></span><br><span class="line"><span class="keyword">name</span>, sex, salary, department,</span><br><span class="line"><span class="keyword">DENSE_RANK</span>() <span class="keyword">OVER</span>(<span class="keyword">ORDER</span> <span class="keyword">BY</span> salary <span class="keyword">DESC</span>) <span class="keyword">AS</span> <span class="keyword">no</span></span><br></pre></td></tr></table></figure>
+
+<table>
+<thead>
+<tr>
+<th>name</th>
+<th align="center">sex</th>
+<th align="right">salary</th>
+<th align="right">department</th>
+<th align="right">no</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Mary</td>
+<td align="center">F</td>
+<td align="right">1000</td>
+<td align="right">HR</td>
+<td align="right">1</td>
+</tr>
+<tr>
+<td>Candy</td>
+<td align="center">F</td>
+<td align="right">1000</td>
+<td align="right">IT</td>
+<td align="right">1</td>
+</tr>
+<tr>
+<td>Peter</td>
+<td align="center">M</td>
+<td align="right">800</td>
+<td align="right">HR</td>
+<td align="right">2</td>
+</tr>
+<tr>
+<td>John</td>
+<td align="center">M</td>
+<td align="right">800</td>
+<td align="right">QA</td>
+<td align="right">2</td>
+</tr>
+<tr>
+<td>Tom</td>
+<td align="center">M</td>
+<td align="right">500</td>
+<td align="right">IT</td>
+<td align="right">3</td>
+</tr>
+<tr>
+<td>Jen</td>
+<td align="center">F</td>
+<td align="right">500</td>
+<td align="right">IT</td>
+<td align="right">3</td>
+</tr>
+<tr>
+<td>Amy</td>
+<td align="center">F</td>
+<td align="right">300</td>
+<td align="right">IT</td>
+<td align="right">4</td>
+</tr>
+</tbody></table>
+<hr>
+<h3 id="Case-B-考慮不同部門依據薪水進行編號"><a href="#Case-B-考慮不同部門依據薪水進行編號" class="headerlink" title="[Case B]: 考慮不同部門依據薪水進行編號"></a>[Case B]: 考慮不同部門依據薪水進行編號</h3><p>我們使用 <code>PARTITION BY department ORDER BY salary DESC</code> 將資料依據不同部門，針對薪水高低進行編號。</p>
+<ul>
+<li><strong>RANK()</strong></li>
+</ul>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span></span><br><span class="line"><span class="keyword">name</span>, sex, salary, department,</span><br><span class="line"><span class="keyword">RANK</span>() <span class="keyword">OVER</span>(<span class="keyword">PARTITION</span> <span class="keyword">BY</span> department </span><br><span class="line">            <span class="keyword">ORDER</span> <span class="keyword">BY</span> salary <span class="keyword">DESC</span>) <span class="keyword">AS</span> <span class="keyword">no</span></span><br></pre></td></tr></table></figure>
+
+<table>
+<thead>
+<tr>
+<th>name</th>
+<th align="center">sex</th>
+<th align="right">salary</th>
+<th align="right">department</th>
+<th align="right">no</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Mary</td>
+<td align="center">F</td>
+<td align="right">1000</td>
+<td align="right">HR</td>
+<td align="right">1</td>
+</tr>
+<tr>
+<td>Peter</td>
+<td align="center">M</td>
+<td align="right">800</td>
+<td align="right">HR</td>
+<td align="right">2</td>
+</tr>
+<tr>
+<td>Candy</td>
+<td align="center">F</td>
+<td align="right">1000</td>
+<td align="right">IT</td>
+<td align="right">1</td>
+</tr>
+<tr>
+<td>Tom</td>
+<td align="center">M</td>
+<td align="right">500</td>
+<td align="right">IT</td>
+<td align="right">2</td>
+</tr>
+<tr>
+<td>Jen</td>
+<td align="center">F</td>
+<td align="right">500</td>
+<td align="right">IT</td>
+<td align="right">3</td>
+</tr>
+<tr>
+<td>Amy</td>
+<td align="center">F</td>
+<td align="right">300</td>
+<td align="right">IT</td>
+<td align="right">4</td>
+</tr>
+<tr>
+<td>John</td>
+<td align="center">M</td>
+<td align="right">800</td>
+<td align="right">QA</td>
+<td align="right">1</td>
+</tr>
+</tbody></table>
+<ul>
+<li><strong>RANK()</strong></li>
+</ul>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span></span><br><span class="line"><span class="keyword">name</span>, sex, salary, department,</span><br><span class="line"><span class="keyword">RANK</span>() <span class="keyword">OVER</span>(<span class="keyword">PARTITION</span> <span class="keyword">BY</span> department </span><br><span class="line">            <span class="keyword">ORDER</span> <span class="keyword">BY</span> salary <span class="keyword">DESC</span>) <span class="keyword">AS</span> <span class="keyword">no</span></span><br></pre></td></tr></table></figure>
+
+<table>
+<thead>
+<tr>
+<th>name</th>
+<th align="center">sex</th>
+<th align="right">salary</th>
+<th align="right">department</th>
+<th align="right">no</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Mary</td>
+<td align="center">F</td>
+<td align="right">1000</td>
+<td align="right">HR</td>
+<td align="right">1</td>
+</tr>
+<tr>
+<td>Peter</td>
+<td align="center">M</td>
+<td align="right">800</td>
+<td align="right">HR</td>
+<td align="right">2</td>
+</tr>
+<tr>
+<td>Candy</td>
+<td align="center">F</td>
+<td align="right">1000</td>
+<td align="right">IT</td>
+<td align="right">1</td>
+</tr>
+<tr>
+<td>Tom</td>
+<td align="center">M</td>
+<td align="right">500</td>
+<td align="right">IT</td>
+<td align="right">2</td>
+</tr>
+<tr>
+<td>Jen</td>
+<td align="center">F</td>
+<td align="right">500</td>
+<td align="right">IT</td>
+<td align="right">2</td>
+</tr>
+<tr>
+<td>Amy</td>
+<td align="center">F</td>
+<td align="right">300</td>
+<td align="right">IT</td>
+<td align="right">4</td>
+</tr>
+<tr>
+<td>John</td>
+<td align="center">M</td>
+<td align="right">800</td>
+<td align="right">QA</td>
+<td align="right">1</td>
+</tr>
+</tbody></table>
+<ul>
+<li><strong>DENSE_RANK()</strong></li>
+</ul>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span></span><br><span class="line"><span class="keyword">name</span>, sex, salary, department,</span><br><span class="line"><span class="keyword">DENSE_RANK</span>() <span class="keyword">OVER</span>(<span class="keyword">PARTITION</span> <span class="keyword">BY</span> department </span><br><span class="line">            <span class="keyword">ORDER</span> <span class="keyword">BY</span> salary <span class="keyword">DESC</span>) <span class="keyword">AS</span> <span class="keyword">no</span></span><br></pre></td></tr></table></figure>
+
+<table>
+<thead>
+<tr>
+<th>name</th>
+<th align="center">sex</th>
+<th align="right">salary</th>
+<th align="right">department</th>
+<th align="right">no</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Mary</td>
+<td align="center">F</td>
+<td align="right">1000</td>
+<td align="right">HR</td>
+<td align="right">1</td>
+</tr>
+<tr>
+<td>Peter</td>
+<td align="center">M</td>
+<td align="right">800</td>
+<td align="right">HR</td>
+<td align="right">2</td>
+</tr>
+<tr>
+<td>Candy</td>
+<td align="center">F</td>
+<td align="right">1000</td>
+<td align="right">IT</td>
+<td align="right">1</td>
+</tr>
+<tr>
+<td>Tom</td>
+<td align="center">M</td>
+<td align="right">500</td>
+<td align="right">IT</td>
+<td align="right">2</td>
+</tr>
+<tr>
+<td>Jen</td>
+<td align="center">F</td>
+<td align="right">500</td>
+<td align="right">IT</td>
+<td align="right">2</td>
+</tr>
+<tr>
+<td>Amy</td>
+<td align="center">F</td>
+<td align="right">300</td>
+<td align="right">IT</td>
+<td align="right">3</td>
+</tr>
+<tr>
+<td>John</td>
+<td align="center">M</td>
+<td align="right">800</td>
+<td align="right">QA</td>
+<td align="right">1</td>
+</tr>
+</tbody></table>
+
+        </div>
+
+        
+            <section class="post-copyright">
+                
+                    <p class="copyright-item">
+                        <span>Author:</span>
+                        <span>Hilbert SYU</span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>Permalink:</span>
+                        <span><a href="https://david111esc.github.io/2019/11/05/SQL-PostgreSQL-函數筆記-2/">https://david111esc.github.io/2019/11/05/SQL-PostgreSQL-函數筆記-2/</a></span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>License:</span>
+                        <span>Copyright (c) 2019 <a href="http://creativecommons.org/licenses/by-nc/4.0/">CC-BY-NC-4.0</a> LICENSE</span>
+                    </p>
+                
+                
+                     <p class="copyright-item">
+                         <span>Slogan:</span>
+                         <span>我來開條路，大家一起上來走，就這麼辦吧!</span>
+                     </p>
+                
+
+            </section>
+        
+        <section class="post-tags">
+            <div>
+                <span>Tag(s):</span>
+                <span class="tag">
+                    
+                    
+                        <a href="/tags/SQL/"># SQL</a>
+                    
+                        <a href="/tags/PostgreSQL/"># PostgreSQL</a>
+                    
+                        
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">back</a>
+                <span>· </span>
+                <a href="/">home</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+            
+            <a class="next" rel="next" href="/2019/11/04/排球打Play問題-0/">排球打Play問題-0</a>
+            
+        </section>
+
+
+    </article>
+</div>
+
+        </div>
+        <footer id="footer" class="footer">
+    <div class="copyright">
+        <span>© Hilbert SYU | Powered by <a href="https://hexo.io" target="_blank">Hexo</a> & <a href="https://github.com/Siricee/hexo-theme-Chic" target="_blank">Chic</a></span>
+    </div>
+</footer>
+
+    </div>
+</body>
+</html>
